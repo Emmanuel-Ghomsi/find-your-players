@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import Toast from "../components/Toast";
+import { isAuth } from "../helpers/auth";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ function Register() {
     password: "",
     confirmPassword: "",
   });
+  const [verifyPassword, setVerifyPassword] = useState(false);
 
   const API_URL = "http://localhost:4000/api/users";
   const backgroundImage = "background-image";
@@ -17,15 +19,18 @@ function Register() {
     "url('https://res.cloudinary.com/emmanuelsan/image/upload/v1646325352/fyp_czgxod.jpg')";
 
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
-    if (user) navigate("/in/dashboard");
+    if (isAuth()) navigate("/in/dashboard");
   });
 
   const { name, email, password, confirmPassword } = formData;
 
   const handleChange = (e) => {
+    if (e.target.name === "confirmPassword") {
+      if (password !== e.target.value) setVerifyPassword(true);
+      else setVerifyPassword(false);
+    }
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
@@ -42,9 +47,7 @@ function Register() {
             ...formData,
           })
           .then((res) => {
-            localStorage.setItem("user", JSON.stringify(res.data));
-            Toast("success", "Success!");
-            navigate("/in/dashboard");
+            Toast("success", JSON.stringify(res.data.message));
           })
           .catch((err) => {
             Toast("error", JSON.stringify(err.response.data));
@@ -127,7 +130,11 @@ function Register() {
                           placeholder="Confirmer le mot de passe"
                         />
                       </div>
-
+                      {verifyPassword ? (
+                        <div className="text-gradient text-danger text-xs">
+                          Les mots de passe ne correspondent pas
+                        </div>
+                      ) : null}
                       <div className="text-center">
                         <button
                           type="submit"
@@ -141,7 +148,7 @@ function Register() {
 
                   <div className="card-footer text-center pt-0 px-lg-2 px-1">
                     <p className="mb-4 text-sm mx-auto">
-                      Vous possedez déjà un compte ?
+                      Vous possedez déjà un compte ?&nbsp;
                       <Link
                         to="/"
                         className="text-info text-gradient font-weight-bold"

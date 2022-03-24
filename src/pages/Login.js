@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Toast from "../components/Toast";
+import { isAuth } from "../helpers/auth";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -15,10 +16,9 @@ function Login() {
     "url('https://res.cloudinary.com/emmanuelsan/image/upload/v1646325352/fyp_czgxod.jpg')";
 
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
-    if (user) navigate("/in/dashboard");
+    if (isAuth()) navigate("/in/dashboard");
   });
 
   const { email, password } = formData;
@@ -37,7 +37,8 @@ function Login() {
           ...formData,
         })
         .then((res) => {
-          localStorage.setItem("user", JSON.stringify(res.data));
+          localStorage.setItem("user", JSON.stringify(res.data.user));
+          localStorage.setItem("token", JSON.stringify(res.data.token));
           Toast("success", "Success!");
           navigate("/in/dashboard");
         })
@@ -108,7 +109,7 @@ function Login() {
 
                   <div className="card-footer text-center pt-0 px-lg-2 px-1">
                     <p className="mb-4 text-sm mx-auto">
-                      Vous n'avez pas de compte ?
+                      Vous n'avez pas de compte ?&nbsp;
                       <Link
                         to="/register"
                         className="text-info text-gradient font-weight-bold"
