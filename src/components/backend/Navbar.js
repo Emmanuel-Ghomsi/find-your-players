@@ -1,10 +1,20 @@
 import { useNavigate, Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { checkIfAuth } from "../../app/slices/authSlice";
+
 function Navbar() {
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
 
+  // All from react-redux
+  const auth = useSelector((state) => state.isAuth.isAuth);
+  const dispatch = useDispatch();
+
   const handleLogout = (e) => {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    // Dispach
+    dispatch(checkIfAuth());
     navigate("/");
     e.preventDefault();
   };
@@ -22,9 +32,14 @@ function Navbar() {
         >
           <ul className="navbar-nav  justify-content-end">
             <li className="nav-item d-flex align-items-center">
-              <Link to="/in/profile" className="nav-link text-body font-weight-bold px-4">
+              <Link
+                to="/in/profile"
+                className="nav-link text-body font-weight-bold px-4"
+              >
                 <i className="fa fa-user me-sm-1"></i>
-                <span className="d-sm-inline d-none">{user.name}</span>
+                <span className="d-sm-inline d-none">
+                  {user ? user.name : ""}
+                </span>
               </Link>
             </li>
             <li className="nav-item d-flex align-items-center">

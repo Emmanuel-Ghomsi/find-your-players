@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Toast from "../components/Toast";
-import { isAuth } from "../helpers/auth";
 
 function Register() {
+  // Hook
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -13,16 +13,12 @@ function Register() {
   });
   const [verifyPassword, setVerifyPassword] = useState(false);
 
+  // API URL
   const API_URL = "http://localhost:4000/api/users";
-  const backgroundImage = "background-image";
+
+  // Image URL
   const imageURL =
     "url('https://res.cloudinary.com/emmanuelsan/image/upload/v1646325352/fyp_czgxod.jpg')";
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isAuth()) navigate("/in/dashboard");
-  });
 
   const { name, email, password, confirmPassword } = formData;
 

@@ -2,24 +2,33 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Toast from "../components/Toast";
-import { isAuth } from "../helpers/auth";
+import { useSelector, useDispatch } from "react-redux";
+import { checkIfAuth } from "../app/slices/authSlice";
 
 function Login() {
+  // Hook
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
+  // API URL
   const API_URL = "http://localhost:4000/api/users/login";
-  const backgroundImage = "background-image";
+
+  // Image URL
   const imageURL =
     "url('https://res.cloudinary.com/emmanuelsan/image/upload/v1646325352/fyp_czgxod.jpg')";
 
-  const navigate = useNavigate();
+  // All from react-redux
+  const auth = useSelector((state) => state.isAuth.isAuth);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isAuth()) navigate("/in/dashboard");
-  });
+    if (auth) {
+      navigate("/in/dashboard");
+    }
+  }, []);
 
   const { email, password } = formData;
 
@@ -39,6 +48,7 @@ function Login() {
         .then((res) => {
           localStorage.setItem("user", JSON.stringify(res.data.user));
           localStorage.setItem("token", JSON.stringify(res.data.token));
+          dispatch(checkIfAuth());
           Toast("success", "Success!");
           navigate("/in/dashboard");
         })

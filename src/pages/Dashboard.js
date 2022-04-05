@@ -1,30 +1,24 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import axios from "axios";
 import Toast from "../components/Toast";
+import { useSelector } from "react-redux";
 
 function Dashboard() {
+  // Hook
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
-  const token = JSON.parse(localStorage.getItem("token"));
-  const API_URL_VERIFY = "http://localhost:4000/api/users/verify/token";
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-  const backgroundImage = "background-image";
+
+  // Image URL
   const imageURL =
     "url('https://res.cloudinary.com/emmanuelsan/image/upload/v1646325352/fyp_czgxod.jpg')";
 
+  // All from react-redux
+  const auth = useSelector((state) => state.isAuth.isAuth);
+
   useEffect(() => {
-    axios.post(API_URL_VERIFY, { user }, config).then((res) => {
-      if (!res.data.response) {
-        navigate("/login");
-        Toast("error", "Vous ne pouvez acceder à ce contenu !");
-      }
-    });
-  });
+    if (!auth) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <div className="row mt-4">

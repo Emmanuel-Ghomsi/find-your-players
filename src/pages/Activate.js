@@ -2,25 +2,31 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Toast from "../components/Toast";
-import { isAuth } from "../helpers/auth";
 
 function Activate() {
+  // Hook
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     token: "",
   });
   const [email, setEmail] = useState("");
   const { token } = useParams();
 
+  // API URL
   const API_URL = "http://localhost:4000/api/users/activate";
   const API_URL_RESEND =
     "http://localhost:4000/api/users/resent/verify-account";
-  const backgroundImage = "background-image";
+
+  // Image URL
   const imageURL =
     "url('https://res.cloudinary.com/emmanuelsan/image/upload/v1646325352/fyp_czgxod.jpg')";
-  const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuth()) navigate("/in/dashboard");
+    /*const state = store.getState();
+    if (state.isAuth) {
+      navigate("/in/dashboard");
+    }*/
+
     if (token) {
       setFormData({ ...formData, token });
     }
