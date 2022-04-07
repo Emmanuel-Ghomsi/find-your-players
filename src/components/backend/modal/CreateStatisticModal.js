@@ -1,9 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Toast from "../../Toast";
+import { APP_URL } from "../../../config/config";
 
 function CreateStatisticModal() {
+  // Hook
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     poste: "",
     nbrBut: "",
@@ -16,8 +19,11 @@ function CreateStatisticModal() {
     saison: "",
   });
 
-  const API_URL = "http://localhost:4000/api/statistics";
-  const navigate = useNavigate();
+  // API URL
+  const API_URL = APP_URL + "statistics";
+
+  // From localStorage
+  const token = JSON.parse(localStorage.getItem("token"));
   const user = JSON.parse(localStorage.getItem("user"));
 
   const {
@@ -43,7 +49,7 @@ function CreateStatisticModal() {
     // header for authorization
     const config = {
       headers: {
-        Authorization: `Bearer ${user.token}`,
+        Authorization: `Bearer ${token}`,
       },
     };
 
@@ -80,6 +86,24 @@ function CreateStatisticModal() {
 
   return (
     <>
+      <ol className="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+        <li className="breadcrumb-item text-sm">
+          <Link className="opacity-5 text-dark" to="/in/dashboard">
+            FYPL
+          </Link>
+        </li>
+        <li className="breadcrumb-item text-sm">
+          <Link className="opacity-5 text-dark" to="/in/statistic">
+            Statistique
+          </Link>
+        </li>
+        <li
+          className="breadcrumb-item text-sm text-dark active"
+          aria-current="page"
+        >
+          Ajouter une statistique
+        </li>
+      </ol>
       <div className="row">
         <div className="col-12 mt-4">
           <div className="card mb-4">

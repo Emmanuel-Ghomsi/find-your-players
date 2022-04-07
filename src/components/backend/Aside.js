@@ -14,7 +14,7 @@ function Aside() {
           id="iconSidenav"
         ></i>
         <Link className="navbar-brand m-0" to="/in/dashboard">
-          <span className="ms-1 font-weight-bold">Find Your Player</span>
+          <span className="ms-1 fs-5 font-weight-bold text-primary">fypl</span>
         </Link>
       </div>
       <hr className="horizontal dark mt-0" />

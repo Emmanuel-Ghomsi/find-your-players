@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import Toast from "../../Toast";
+import { APP_URL }  from '../../../config/config'
 
 function UpdateStatisticModal() {
+  // Hook
   const [formData, setFormData] = useState({
     poste: "",
     nbrBut: "",
@@ -15,11 +17,20 @@ function UpdateStatisticModal() {
     cartonRouge: "",
     saison: "",
   });
-
-  const API_URL = "http://localhost:4000/api/statistics";
+  const { id } = useParams();
   const navigate = useNavigate();
+  // API routes
+  const API_URL = APP_URL + "statistics/";
+
+  // From localStorage
+  const token = JSON.parse(localStorage.getItem("token"));
   const user = JSON.parse(localStorage.getItem("user"));
 
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
   const {
     poste,
     nbrBut,
@@ -32,6 +43,12 @@ function UpdateStatisticModal() {
     saison,
   } = formData;
 
+  useEffect(() => {
+    axios.get(API_URL + id, config).then((res) => {
+      setFormData(res.data);
+    });
+  }, []);
+
   const handleChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -43,14 +60,14 @@ function UpdateStatisticModal() {
     // header for authorization
     const config = {
       headers: {
-        Authorization: `Bearer ${user.token}`,
+        Authorization: `Bearer ${token}`,
       },
     };
 
     try {
       axios
-        .post(
-          API_URL,
+        .put(
+          API_URL + id,
           {
             poste: poste,
             nbrBut: nbrBut,
@@ -80,6 +97,24 @@ function UpdateStatisticModal() {
 
   return (
     <>
+    <ol className="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+      <li className="breadcrumb-item text-sm">
+        <Link className="opacity-5 text-dark" to="/in/dashboard">
+          FYPL
+        </Link>
+      </li>
+      <li className="breadcrumb-item text-sm">
+        <Link className="opacity-5 text-dark" to="/in/statistic">
+          Statistique
+        </Link>
+      </li>
+      <li
+        className="breadcrumb-item text-sm text-dark active"
+        aria-current="page"
+      >
+        Modifier une statistique
+      </li>
+    </ol>
       <div className="row">
         <div className="col-12 mt-4">
           <div className="card mb-4">
@@ -95,6 +130,7 @@ function UpdateStatisticModal() {
                     <select
                       className="form-select"
                       name="poste"
+                      value={poste}
                       onChange={handleChange}
                     >
                       <option value="">Choisir un poste</option>
@@ -202,6 +238,7 @@ function UpdateStatisticModal() {
                     <select
                       className="form-select"
                       name="saison"
+                      value={saison}
                       onChange={handleChange}
                     >
                       <option value="">Choisir une saison</option>

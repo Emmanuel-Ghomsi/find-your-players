@@ -30,16 +30,22 @@ function Navbar() {
           className="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4"
           id="navbar"
         >
-          <ul className="navbar-nav  justify-content-end">
+          <ul className="navbar-nav justify-content-end">
             <li className="nav-item d-flex align-items-center">
               <Link
                 to="/in/profile"
-                className="nav-link text-body font-weight-bold px-4"
+                className="nav-link text-body font-weight-bold px-4 d-flex align-items-center"
               >
-                <i className="fa fa-user me-sm-1"></i>
-                <span className="d-sm-inline d-none">
+                <div className="avatar avatar-xl position-relative">
+                  <img
+                    src={user.avatar ? user.avatar : "../assets/img/bruce-mars.jpg"}
+                    alt="profile_image"
+                    className="w-75 rounded-circle shadow-sm"
+                  />
+                </div>
+                <div className="d-sm-inline d-none">
                   {user ? user.name : ""}
-                </span>
+                </div>
               </Link>
             </li>
             <li className="nav-item d-flex align-items-center">

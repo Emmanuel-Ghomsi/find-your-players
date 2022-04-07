@@ -5,7 +5,10 @@ function Footer() {
         <div className="row align-items-center justify-content-lg-between">
           <div className="col-lg-6 mb-lg-0 mb-4">
             <div className="copyright text-center text-sm text-muted text-lg-start">
-              © {new Date().getFullYear()}, fait avec&nbsp;
+            Copyright ©
+              <span className="ms-1 font-weight-bold text-primary">
+                fypl
+              </span>&nbsp;{new Date().getFullYear()}, fait avec&nbsp;
               <i className="fa fa-heart text-danger"></i> par Emmanuel
             </div>
           </div>

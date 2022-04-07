@@ -19,7 +19,7 @@ function Backend() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="statistic" element={<Statistic />} />
             <Route path="create-statistic" element={<CreateStatisticModal />} />
-            <Route path="update-statistic" element={<UpdateStatisticModal />} />
+            <Route path="update-statistic/:id" element={<UpdateStatisticModal />} />
             <Route path="profile" element={<Profile />} />
           </Routes>
 

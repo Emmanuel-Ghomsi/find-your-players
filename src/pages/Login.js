@@ -4,6 +4,7 @@ import axios from "axios";
 import Toast from "../components/Toast";
 import { useSelector, useDispatch } from "react-redux";
 import { checkIfAuth } from "../app/slices/authSlice";
+import { APP_URL } from "../config/config";
 
 function Login() {
   // Hook
@@ -14,7 +15,7 @@ function Login() {
   });
 
   // API URL
-  const API_URL = "http://localhost:4000/api/users/login";
+  const API_URL = APP_URL + "users/login";
 
   // Image URL
   const imageURL =

@@ -6,7 +6,7 @@ function Footer() {
         <div className="row">
           <div className="col-8 mx-auto text-center mt-1">
             <p className="mb-0 text-secondary text-xs">
-              Copyright © <Link to="/" className="text-gradient text-dark">Find Your players</Link> {new Date().getFullYear()} fait avec&nbsp;
+              Copyright © <Link to="/" className="text-gradient text-dark">fypl</Link> {new Date().getFullYear()} fait avec&nbsp;
               <i className="fa fa-heart text-danger"></i> par Emmanuel
             </p>
           </div>

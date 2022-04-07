@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Toast from "../components/Toast";
+import { APP_URL } from "../config/config";
 
 function Register() {
   // Hook
@@ -14,7 +15,7 @@ function Register() {
   const [verifyPassword, setVerifyPassword] = useState(false);
 
   // API URL
-  const API_URL = "http://localhost:4000/api/users";
+  const API_URL = APP_URL + "users";
 
   // Image URL
   const imageURL =

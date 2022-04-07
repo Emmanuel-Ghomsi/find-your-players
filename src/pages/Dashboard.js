@@ -1,11 +1,23 @@
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Toast from "../components/Toast";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import { APP_URL } from "../config/config";
 
 function Dashboard() {
+  // API URL
+  const API_URL = APP_URL + "users/profile/";
+  const API_URL_STATS = APP_URL + "statistics/user/";
+
   // Hook
   const navigate = useNavigate();
+  const [userDetails, setUserDetails] = useState({});
+  const [percentage, setPercentage] = useState(5);
+  const [classProgress, setClassProgress] = useState(
+    "progress-bar bg-gradient-danger"
+  );
+  const [stat, setStat] = useState({});
 
   // Image URL
   const imageURL =
@@ -14,88 +26,154 @@ function Dashboard() {
   // All from react-redux
   const auth = useSelector((state) => state.isAuth.isAuth);
 
+  // From localStorage
+  const token = JSON.parse(localStorage.getItem("token"));
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   useEffect(() => {
-    if (!auth) {
-      navigate("/");
-    }
+    // if (!auth) navigate("/");
+
+    axios.get(API_URL + user._id, config).then((res) => {
+      const userData = res.data;
+      setUserDetails(userData);
+
+      axios.get(API_URL_STATS + user._id, config).then((res) => {
+        const statData = res.data;
+        setStat(statData);
+        calculateThePercentageOfTheProfile(userData, statData);
+      });
+    });
   }, []);
 
+  const calculateThePercentageOfTheProfile = (user, stat) => {
+    if (
+      user.address &&
+      user.avatar &&
+      user.firstname &&
+      user.lastname &&
+      user.profileInformation &&
+      user.telephone &&
+      stat.length === 0
+    ) {
+      setPercentage(50);
+      setClassProgress("progress-bar bg-gradient-info");
+    } else if (
+      user.address &&
+      user.avatar &&
+      user.firstname &&
+      user.lastname &&
+      !user.profileInformation &&
+      user.telephone &&
+      stat.length === 0
+    ) {
+      setPercentage(25);
+      setClassProgress("progress-bar bg-gradient-warning");
+    } else if (
+      user.address &&
+      user.avatar &&
+      user.firstname &&
+      user.lastname &&
+      user.profileInformation &&
+      user.telephone &&
+      stat.length !== 0
+    ) {
+      setPercentage(80);
+      setClassProgress("progress-bar bg-gradient-success");
+    } else if (
+      user.address &&
+      user.avatar &&
+      user.firstname &&
+      user.lastname &&
+      !user.profileInformation &&
+      user.telephone &&
+      stat.length !== 0
+    ) {
+      setPercentage(60);
+      setClassProgress("progress-bar bg-gradient-info");
+    }
+  };
   return (
-    <div className="row mt-4">
-      <div className="col-lg-7 mb-lg-0 mb-4">
-        <div className="card">
-          <div className="card-body p-3">
-            <div className="row">
-              <div className="col-lg-6">
-                <div className="d-flex flex-column h-100">
-                  <p className="mb-1 pt-2 text-bold">Built by developers</p>
-                  <h5 className="font-weight-bolder">Soft UI Dashboard</h5>
-                  <p className="mb-5">
-                    From colors, cards, typography to complex elements, you will
-                    find the full documentation.
-                  </p>
-                  <a
-                    className="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto"
-                    href="#"
+    <>
+      <ol className="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+        <li className="breadcrumb-item text-sm">
+          <Link className="opacity-5 text-dark" to="/in/dashboard">
+            FYPL
+          </Link>
+        </li>
+        <li
+          className="breadcrumb-item text-sm text-dark active"
+          aria-current="page"
+        >
+          Tableau de bord
+        </li>
+      </ol>
+      <div className="row mt-4">
+        <div className="col-lg-5">
+          <div className="card h-100 p-3">
+            <div
+              className="overflow-hidden position-relative border-radius-lg bg-cover h-100"
+              style={{ backgroundImage: imageURL }}
+            >
+              <span className="mask bg-gradient-dark"></span>
+              <div className="card-body position-relative z-index-1 d-flex flex-column h-100 p-3">
+                <h5 className="text-white font-weight-bolder mb-4 pt-2">
+                  État de votre profil
+                </h5>
+                <p className="text-white">
+                  Passer votre profil au pourcentage maximum vous aidera à
+                  attirer plus de visibilité. Pensez à le completer 😉
+                </p>
+                <div className="d-flex text-white align-items-center justify-content-center my-3">
+                  <span className="me-2 text-xs font-weight-bold">
+                    {percentage}%
+                  </span>
+                  <div>
+                    <div className="progress">
+                      <div
+                        className={classProgress}
+                        role="progressbar"
+                        aria-valuenow={percentage}
+                        aria-valuemin="0"
+                        aria-valuemax={percentage}
+                        style={{ width: percentage }}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="d-flex justify-content-between">
+                  <Link
+                    className="text-white text-sm font-weight-bold mb-0 icon-move-right mt-auto"
+                    to="/in/profile"
                   >
-                    Read More
+                    Votre profil
                     <i
                       className="fas fa-arrow-right text-sm ms-1"
                       aria-hidden="true"
                     ></i>
-                  </a>
-                </div>
-              </div>
-              <div className="col-lg-5 ms-auto text-center mt-5 mt-lg-0">
-                <div className="bg-gradient-primary border-radius-lg h-100">
-                  <img
-                    src="../assets/img/shapes/waves-white.svg"
-                    className="position-absolute h-100 w-50 top-0 d-lg-block d-none"
-                    alt="waves"
-                  />
-                  <div className="position-relative d-flex align-items-center justify-content-center h-100">
-                    <img
-                      className="w-100 position-relative z-index-2 pt-4"
-                      src="../assets/img/illustrations/rocket-white.png"
-                      alt="rocket"
-                    />
-                  </div>
+                  </Link>
+                  <Link
+                    className="text-white text-sm font-weight-bold mb-0 icon-move-right mt-auto"
+                    to="/in/statistic"
+                  >
+                    Renseigner vos statistiques
+                    <i
+                      className="fas fa-arrow-right text-sm ms-1"
+                      aria-hidden="true"
+                    ></i>
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="col-lg-5">
-        <div className="card h-100 p-3">
-          <div
-            className="overflow-hidden position-relative border-radius-lg bg-cover h-100"
-            style={{ backgroundImage: imageURL }}
-          >
-            <span className="mask bg-gradient-dark"></span>
-            <div className="card-body position-relative z-index-1 d-flex flex-column h-100 p-3">
-              <h5 className="text-white font-weight-bolder mb-4 pt-2">
-                Work with the rockets
-              </h5>
-              <p className="text-white">
-                Wealth creation is an evolutionarily recent positive-sum game.
-                It is all about who take the opportunity first.
-              </p>
-              <a
-                className="text-white text-sm font-weight-bold mb-0 icon-move-right mt-auto"
-                href="#"
-              >
-                Read More
-                <i
-                  className="fas fa-arrow-right text-sm ms-1"
-                  aria-hidden="true"
-                ></i>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </>
   );
 }
 

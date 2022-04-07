@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { APP_URL }  from '../../config/config'
 
 const authSlice = createSlice({
   name: "isAuth",
@@ -10,7 +11,7 @@ const authSlice = createSlice({
     checkIfAuth: (state) => {
       const user = JSON.parse(localStorage.getItem("user"));
       const token = JSON.parse(localStorage.getItem("token"));
-      const API_URL_VERIFY = "http://localhost:4000/api/users/verify/token";
+      const API_URL_VERIFY = APP_URL + "users/verify/token";
 
       const config = {
         headers: {

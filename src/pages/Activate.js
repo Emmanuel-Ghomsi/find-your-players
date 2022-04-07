@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Toast from "../components/Toast";
+import { APP_URL }  from "../config/config";
 
 function Activate() {
   // Hook
@@ -13,9 +14,8 @@ function Activate() {
   const { token } = useParams();
 
   // API URL
-  const API_URL = "http://localhost:4000/api/users/activate";
-  const API_URL_RESEND =
-    "http://localhost:4000/api/users/resent/verify-account";
+  const API_URL = APP_URL + "users/activate";
+  const API_URL_RESEND = APP_URL + "users/resent/verify-account";
 
   // Image URL
   const imageURL =
