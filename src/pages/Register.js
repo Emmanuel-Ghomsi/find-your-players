@@ -1,11 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Toast from "../components/Toast";
 import { APP_URL } from "../config/config";
 
 function Register() {
   // Hook
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -45,12 +46,13 @@ function Register() {
           })
           .then((res) => {
             Toast("success", JSON.stringify(res.data.message));
+            navigate("/");
           })
           .catch((err) => {
-            Toast("error", JSON.stringify(err.response.data));
+            Toast("error", JSON.stringify(err.response.data.error));
           });
       } catch (error) {
-        Toast("error", JSON.stringify(error.response.data));
+        Toast("error", JSON.stringify(error.response.data.error));
       }
     }
 

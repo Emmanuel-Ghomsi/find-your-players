@@ -13,9 +13,11 @@ function Login() {
     email: "",
     password: "",
   });
+  const [emailResend, setEmailResend] = useState("");
 
   // API URL
   const API_URL = APP_URL + "users/login";
+  const API_URL_RESEND = APP_URL + "users/resent/verify-account";
 
   // Image URL
   const imageURL =
@@ -38,6 +40,29 @@ function Login() {
       ...prevState,
       [e.target.name]: e.target.value,
     }));
+  };
+
+  const handleChangeResend = (event) => {
+    setEmailResend(event.target.value);
+  };
+
+  const handleSubmitResend = (e) => {
+    let email = emailResend;
+    try {
+      axios
+        .post(API_URL_RESEND, {
+          email,
+        })
+        .then((res) => {
+          Toast("success", JSON.stringify(res.data.message));
+        })
+        .catch((err) => {
+          Toast("error", JSON.stringify(err.response.data.error));
+        });
+    } catch (error) {
+      Toast("error", JSON.stringify(error.response.data.error));
+    }
+    e.preventDefault();
   };
 
   const handleSubmit = (e) => {
@@ -128,6 +153,38 @@ function Login() {
                         S'inscrire
                       </Link>
                     </p>
+                  </div>
+
+                  <div className="card-header pb-0 text-left bg-transparent">
+                    <h6 className="font-weight-bolder text-info text-gradient">
+                      Vous n'avez pas reçu de mail de vérification ?
+                    </h6>
+
+                    <div className="card-body">
+                      <form role="form" onSubmit={handleSubmitResend}>
+                        <label>Email</label>
+                        <div className="mb-3">
+                          <input
+                            type="email"
+                            className="form-control"
+                            id="email"
+                            name="email"
+                            value={emailResend}
+                            onChange={handleChangeResend}
+                            placeholder="name@example.com"
+                          />
+                        </div>
+
+                        <div className="text-center">
+                          <button
+                            type="submit"
+                            className="btn bg-gradient-info w-100 mt-4 mb-0"
+                          >
+                            Renvoyer le lien de vérification
+                          </button>
+                        </div>
+                      </form>
+                    </div>
                   </div>
                 </div>
               </div>

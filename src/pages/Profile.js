@@ -93,7 +93,7 @@ function Profile() {
     } catch (error) {
       Toast("error", JSON.stringify(error));
     }
-    e.preventDefault()
+    e.preventDefault();
   };
 
   const handleSubmit = (e) => {
@@ -142,19 +142,6 @@ function Profile() {
 
   return (
     <>
-    <ol className="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-      <li className="breadcrumb-item text-sm">
-        <Link className="opacity-5 text-dark" to="/in/dashboard">
-          FYPL
-        </Link>
-      </li>
-      <li
-        className="breadcrumb-item text-sm text-dark active"
-        aria-current="page"
-      >
-        Profile
-      </li>
-    </ol>
       <div className="row">
         <div className="col-12 mt-4">
           <div className="card card-body blur shadow-blur mx-4 mt-n6 overflow-hidden">
@@ -184,6 +171,19 @@ function Profile() {
           </div>
         </div>
       </div>
+      <ol className="breadcrumb bg-transparent mt-3 mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+        <li className="breadcrumb-item text-sm">
+          <Link className="opacity-5 text-dark" to="/in/dashboard">
+            FYPL
+          </Link>
+        </li>
+        <li
+          className="breadcrumb-item text-sm text-dark active"
+          aria-current="page"
+        >
+          Profile
+        </li>
+      </ol>
       <div className="container-fluid py-4">
         <div className="row">
           <div className="col-12 col-xl-4">
